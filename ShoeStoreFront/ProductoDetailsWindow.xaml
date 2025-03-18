@@ -1,0 +1,132 @@
+﻿<Window x:Class="ShoeStoreFront.ProductoDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShoeStoreFront"
+        xmlns:wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:controls="clr-namespace:ShoeStoreFront.controls"
+        mc:Ignorable="d"
+        WindowState="Maximized"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="#f0f0f0"
+        Title="ProductDetails">
+    <Window.Resources>
+        <ResourceDictionary Source="WindowResources.xaml"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <controls:HeaderControl Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" />
+        <Border Grid.Row="1" Margin="20" Background="White" Padding="20" CornerRadius="10">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
+            </Border.Effect>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Imágenes -->
+                <Grid Grid.Row="0" Grid.Column="0" Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!-- Imagen Grande -->
+                    <Border Grid.Row="0" BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="5" Margin="0 0 0 20">
+                        <Image Source="{Binding SelectedImage}" Stretch="Uniform" MaxHeight="600" MaxWidth="600"/>
+                    </Border>
+                    <!-- Imágenes Pequeñas -->
+                    <ListView Grid.Row="1" ItemsSource="{Binding SelectedVariante.Imagenes}" Margin="10" SelectionMode="Single" HorizontalAlignment="Center">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Transparent" BorderThickness="0" Padding="5">
+                                    <Image Source="{Binding}" Width="100" Height="100" Cursor="Hand" Focusable="True" MouseDown="Image_MouseDown"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <ContentPresenter />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </Grid>
+
+                <!-- Detalles del Producto -->
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <!-- Nombre del Producto -->
+                    <TextBlock Text="{Binding SelectedProducto.Nombre}" FontSize="24" FontWeight="Bold" Margin="10"/>
+                    <!-- Precio del Producto -->
+                    <StackPanel Margin="10">
+                        <TextBlock Text="{Binding SelectedVariante.Precio}" FontSize="24"/>
+                    </StackPanel>
+                    <!-- Cantidad -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                        <TextBlock Text="Cantidad:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <xctk:IntegerUpDown Width="50" Text="1" Minimum="1" x:Name="spinnerCantidad" TextAlignment="Center"/>
+                        <TextBlock Text="{Binding SelectedTalla.Stock}" FontSize="16" Margin="5"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                        <Button Content=" + " Visibility="Collapsed" Padding="10" Margin="10" x:Name="btnAddQT" Click="btnAddQT_Click"/>
+                    </StackPanel>
+                    <!-- Botones -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+                        <Button Content="Añadir a la Cesta" IsEnabled="False" Padding="10" Margin="10" x:Name="btnAddCarro" Click="AddToCart_Click"/>
+                        <Button Content="Cancelar" Padding="10" Margin="10" Click="Cancel_Click"/>
+                    </StackPanel>
+                    <!-- Descripción del Producto -->
+                    <wpf:WebView2 x:Name="wvDesc" Margin="10" HorizontalAlignment="Left" Width="300" Height="300"/>
+                    <!-- Variantes del Producto -->
+                    <ListView ItemsSource="{Binding SelectedProducto.Variantes}" Margin="10" x:Name="lsvVariantes" SelectionChanged="lsvVariantes_SelectionChanged">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Color}" FontSize="16" Padding="5"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <!-- Tallas del Producto -->
+                    <ListView ItemsSource="{Binding SelectedVariante.Tallas}" Margin="10" SelectionMode="Single" x:Name="lsvTallas" SelectionChanged="lsvTallas_SelectionChanged">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock Text="{Binding Talla}" FontSize="16" Margin="5"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

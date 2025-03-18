@@ -4,19 +4,95 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShoeStoreFront"
+        xmlns:controls="clr-namespace:ShoeStoreFront.controls"
         mc:Ignorable="d"
-        Title="ProductosWindow" Height="450" Width="800">
+        Title="Productos"
+        WindowState="Maximized"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Background="#f0f0f0">
+    <Window.Resources>
+        <ResourceDictionary Source="WindowResources.xaml"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dtgProd" Grid.Column="1" AutoGenerateColumns="True" Grid.RowSpan="2"/>
-        <TreeView x:Name="treeViewCategorias" Grid.Column="0" SelectedItemChanged="treeViewCategorias_SelectedItemChanged"/>
-        
+
+        <!-- Header Control -->
+        <controls:HeaderControl Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" />
+
+        <!-- Filtros -->
+        <Border Grid.Column="0" Grid.Row="1" Margin="10" Background="White" Padding="10" CornerRadius="5">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Filtros" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Nombre:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox x:Name="txtNombre" Width="150" TextChanged="txtNombre_TextChanged"/>
+                </StackPanel>
+                <TextBlock Text="Rango de precio" Margin="5"/>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Min:" VerticalAlignment="Center"/>
+                    <Slider x:Name="sliderMinPrecio" Width="100" Minimum="0" Maximum="1000" ValueChanged="sliderMinPrecio_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                    <TextBox x:Name="txtMinPrecio" Width="50" Margin="5" IsReadOnly="True" Text="{Binding ElementName=sliderMinPrecio, Path=Value, StringFormat=N0}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Max:" VerticalAlignment="Center"/>
+                    <Slider x:Name="sliderMaxPrecio" Width="100" Minimum="0" Maximum="1000" ValueChanged="sliderMaxPrecio_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True" Value="1000"/>
+                    <TextBox x:Name="txtMaxPrecio" Width="50" Margin="5" IsReadOnly="True" Text="{Binding ElementName=sliderMaxPrecio, Path=Value, StringFormat=N0}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <TextBlock Text="Talla:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox x:Name="txtTalla" Width="150" TextChanged="txtTalla_TextChanged"/>
+                </StackPanel>
+                <Button Content="Clear" x:Name="btnClearFilter" Click="btnClearFilter_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Marcas -->
+        <Border Grid.Column="0" Grid.Row="2" Margin="10" Background="White" Padding="10" CornerRadius="5">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Marcas" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                <StackPanel x:Name="stackPanelMarcas"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Categorías -->
+        <Border Grid.Column="0" Grid.Row="3" Margin="10" Background="White" Padding="10" CornerRadius="5">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Categorías" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TreeView x:Name="treeViewCategorias" SelectedItemChanged="treeViewCategorias_SelectedItemChanged"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Productos -->
+        <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="10" Background="White" Padding="10" CornerRadius="5">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
+            </Border.Effect>
+            <ListView x:Name="lvProd" SelectionChanged="lvProd_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:ProductItemControl MyProducto="{Binding}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
     </Grid>
 </Window>

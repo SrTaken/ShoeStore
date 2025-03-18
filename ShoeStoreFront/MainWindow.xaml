@@ -6,9 +6,12 @@
         xmlns:local="clr-namespace:ShoeStoreFront"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary Source="WindowResources.xaml"/>
+    </Window.Resources>
     <StackPanel Orientation="Vertical">
-        <TextBox x:Name="txbUsr"/>
-        <TextBox x:Name="txbPasw"/>
+        <TextBox Text="bcristea" x:Name="txbUsr"/>
+        <TextBox Text="temp" x:Name="txbPasw"/>
         <Button x:Name="btnLogin" Content="Login" Click="btnLogin_Click"/>
     </StackPanel>
 </Window>

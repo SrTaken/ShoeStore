@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="ShoeStoreFront.controls.CestaItemControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ShoeStoreFront.controls"
+             mc:Ignorable="d" 
+             x:Name="ucItemCesta">
+    <StackPanel Orientation="Horizontal">
+        <Image Source="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Imagen}" Width="50" Height="50" Margin="5"/>
+        <TextBlock x:Name="txtNombre" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Nombre}" Margin="5"/>
+        <TextBlock x:Name="txtPrecio" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Precio}" Margin="5"/>
+        <TextBlock Text="€" Margin="5"/>
+        <TextBlock Text="Cantidad: " Margin="5"/>
+        <TextBlock x:Name="txtQt" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Cantidad}" Margin="5"/>
+        <TextBlock Text="IVA: " Margin="5"/>
+        <TextBlock x:Name="txtIVA" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.IVA}" Margin="5"/>
+        <TextBlock Text="%" Margin="5"/>
+        <TextBlock Text="Total: " Margin="5"/>
+        <TextBlock x:Name="txtTotalConIVA" Margin="5"/>
+        <Button Content="Eliminar" x:Name="btnEliminar" Click="btnEliminar_Click" Margin="5"/>
+    </StackPanel>
+</UserControl>

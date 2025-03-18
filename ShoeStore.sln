@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShoeStoreFront", "ShoeStoreFront\ShoeStoreFront.csproj", "{494DFA2F-EECB-427F-B3B4-F7F594A38535}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{A4FAF413-AD1A-4778-89EB-C518BA8279CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DB", "DB\DB.csproj", "{726C09B7-8B8C-4681-9953-FF9E80B2B703}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackFactory", "BackFactory\BackFactory.csproj", "{0DB4A72A-82FA-4346-A13B-8A808B2AD06E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{726C09B7-8B8C-4681-9953-FF9E80B2B703}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{726C09B7-8B8C-4681-9953-FF9E80B2B703}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{726C09B7-8B8C-4681-9953-FF9E80B2B703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB4A72A-82FA-4346-A13B-8A808B2AD06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB4A72A-82FA-4346-A13B-8A808B2AD06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB4A72A-82FA-4346-A13B-8A808B2AD06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB4A72A-82FA-4346-A13B-8A808B2AD06E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
