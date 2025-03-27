@@ -28,7 +28,13 @@ namespace ShoeStoreFront.controls
 
         private void onProductoChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-
+            if (MyProducto.Variantes[0].Descuento > 0)
+            {
+                borderDesc.Visibility = Visibility.Visible;
+                txbPrecio.TextDecorations = TextDecorations.Strikethrough;
+                txbPrecio.Foreground = System.Windows.Media.Brushes.Gray;
+                txbPrecioFinal.Text = (MyProducto.Variantes[0].Precio - (MyProducto.Variantes[0].Precio * MyProducto.Variantes[0].Descuento/100)).ToString("C2");
+            }
         }
     }
 }

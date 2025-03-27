@@ -52,7 +52,7 @@ namespace ShoeStoreFront.controls
 
         private void MyItemChanged(DependencyPropertyChangedEventArgs e)
         {
-            decimal totalConIVA = MyItemCesta.Precio * MyItemCesta.Cantidad * (1 + MyItemCesta.IVA / 100);
+            decimal totalConIVA = MyItemCesta.Precio * MyItemCesta.Cantidad * (1 + MyItemCesta.IVA.Porcentaje / 100);
 
             txtTotalConIVA.Text = totalConIVA+"";
         }

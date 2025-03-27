@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using BackFactory;
 using DB;
 using Microsoft.Web.WebView2.Core;
 using Model.Cesta;
@@ -47,7 +49,8 @@ namespace ShoeStoreFront
             Utils.MyCesta.AñadirProducto(new ItemCesta
             {
                 TallaId = SelectedTalla.Id,
-                Cantidad = (int)spinnerCantidad.Value
+                Cantidad = (int)spinnerCantidad.Value,
+                IVA = Utils.IVAManager.GetIVA(SelectedProducto.Iva),
             });
 
             Utils.CestaManager.ActualizarCesta(Utils.MyCesta);
@@ -71,6 +74,23 @@ namespace ShoeStoreFront
             VarianteProducto variante = lsvVariantes.SelectedItem as VarianteProducto;
             SelectedVariante = variante;
             SelectedImage = SelectedVariante.Imagenes[0];
+
+            txbDesc.Text = (SelectedVariante.Descuento / 100).ToString("P0");
+            if (SelectedVariante.Descuento > 0)
+            {
+                txbPrecio.TextDecorations = TextDecorations.Strikethrough;
+                txbPrecio.Foreground = System.Windows.Media.Brushes.Gray;
+                txbPrecioFinal.Text = (SelectedVariante.Precio - (SelectedVariante.Precio * (SelectedVariante.Descuento / 100))).ToString("C2");
+                borderDesc.Visibility = Visibility.Visible;
+            }
+            else 
+            { 
+                borderDesc.Visibility = Visibility.Collapsed;
+                txbPrecio.TextDecorations = null;
+                txbPrecioFinal.Text = null;
+                txbPrecio.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#007ACC"));
+            }
+            
         }
 
         private void lsvTallas_SelectionChanged(object sender, SelectionChangedEventArgs e)

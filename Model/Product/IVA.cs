@@ -15,5 +15,9 @@ namespace Model.Product
         [BsonElement("porcentaje")]
         public decimal Porcentaje { get; set; }
 
+        public override string ToString()
+        {
+            return Porcentaje + "%";
+        }
     }
 }

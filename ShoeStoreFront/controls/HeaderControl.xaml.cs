@@ -1,4 +1,5 @@
-﻿using Model.User;
+﻿using BackFactory;
+using Model.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,7 @@ namespace ShoeStoreFront.controls
 
         private void btnCesta_Click(object sender, RoutedEventArgs e)
         {
-            var cestaWindow = new CestaWindow(MyUsuario.Id);
+            var cestaWindow = new CestaWindow();
             Window.GetWindow(this)?.Close();
             cestaWindow.Show();
         }

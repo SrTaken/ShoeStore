@@ -12,7 +12,7 @@ namespace ShoeStoreFront
     public partial class CestaWindow : Window
     {
 
-        public CestaWindow(ObjectId usuarioId)
+        public CestaWindow()
         {
             InitializeComponent();
             cargarProductos();
@@ -48,15 +48,15 @@ namespace ShoeStoreFront
                         item.Nombre = producto.Nombre;
                         item.Imagen = variante.Imagenes.First();
                         item.Precio = (decimal)variante.Precio;
-                        item.IVA = Utils.IVAManager.GetIVA(producto.Iva).Porcentaje;
+                        item.Descuento = variante.Descuento;
+                        item.IVA = Utils.IVAManager.GetIVA(producto.Iva);
                     }
                 }
             }
         }
         private void btnPagar_Click(object sender, RoutedEventArgs e)
         {
-            return; //Return temporal para evitar que se pague
-            MessageBox.Show("Funcionalidad de pago no implementada.");
+            
             if (lvCestaProductos.Items.Count == 0)
             {
                 MessageBox.Show("No hay productos en la cesta.");
@@ -65,11 +65,10 @@ namespace ShoeStoreFront
 
             //TODO Falta implementar la funcionalidad de pago
 
-            //var pagoWindow = new PagoWindow();
-            //pagoWindow.Show();
-            //this.Close();
-            FacturaFactory.crearFactura(Utils.MyCesta);
-            Utils.CestaManager.EliminarCesta(Utils.MyCesta);
+            var pagoWindow = new PagoWindow();
+            pagoWindow.Show();
+            this.Close();
+
 
         }
 

@@ -9,13 +9,11 @@
     <StackPanel Orientation="Horizontal">
         <Image Source="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Imagen}" Width="50" Height="50" Margin="5"/>
         <TextBlock x:Name="txtNombre" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Nombre}" Margin="5"/>
-        <TextBlock x:Name="txtPrecio" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Precio}" Margin="5"/>
-        <TextBlock Text="€" Margin="5"/>
+        <TextBlock x:Name="txtPrecio" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Precio, StringFormat=C2}" Margin="5"/>
         <TextBlock Text="Cantidad: " Margin="5"/>
         <TextBlock x:Name="txtQt" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Cantidad}" Margin="5"/>
         <TextBlock Text="IVA: " Margin="5"/>
         <TextBlock x:Name="txtIVA" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.IVA}" Margin="5"/>
-        <TextBlock Text="%" Margin="5"/>
         <TextBlock Text="Total: " Margin="5"/>
         <TextBlock x:Name="txtTotalConIVA" Margin="5"/>
         <Button Content="Eliminar" x:Name="btnEliminar" Click="btnEliminar_Click" Margin="5"/>

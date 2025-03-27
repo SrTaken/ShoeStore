@@ -87,6 +87,11 @@
                 <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
             </Border.Effect>
             <ListView x:Name="lvProd" SelectionChanged="lvProd_SelectionChanged">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <controls:ProductItemControl MyProducto="{Binding}"/>

@@ -26,6 +26,9 @@ namespace Model.Cesta
         [BsonElement("precio_final_iva")]
         public decimal PrecioFinalConIva { get; set; }
 
+        [BsonElement("impuestos")]
+        public decimal Impuestos { get; set; }
+
         [BsonElement("metodo_envio")]
         public ObjectId MetodoEnvio { get; set; }
 
@@ -56,7 +59,10 @@ namespace Model.Cesta
             decimal totalSinIvaConMetodoEnvio = totalSinIVA>=precioMetodoEnvioMinimo ? totalSinIVA:totalSinIVA+precioMetodoEnvioBase;
             PrecioFinal = totalSinIvaConMetodoEnvio;
 
-            decimal totalConIVA= (Productos.Sum(p => (p.Precio * (1 + p.IVA/100)) * p.Cantidad));
+            decimal iva = Productos.Sum(p => p.Precio * p.IVA.Porcentaje / 100 * p.Cantidad);
+            Impuestos = iva;
+
+            decimal totalConIVA= (Productos.Sum(p => (p.Precio * (1 + p.IVA.Porcentaje/100)) * p.Cantidad));
             decimal totalConIvaConMetodoEnvio = totalConIVA >= precioMetodoEnvioMinimo ? totalConIVA : totalConIVA + (precioMetodoEnvioBase * 1+ MetodoEnvioIVA/100);
             PrecioFinalConIva = totalConIvaConMetodoEnvio;
         }

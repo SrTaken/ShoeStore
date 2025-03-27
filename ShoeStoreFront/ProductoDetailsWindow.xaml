@@ -81,10 +81,17 @@
                 <!-- Detalles del Producto -->
                 <StackPanel Grid.Row="0" Grid.Column="1" Margin="0" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <!-- Nombre del Producto -->
-                    <TextBlock Text="{Binding SelectedProducto.Nombre}" FontSize="24" FontWeight="Bold" Margin="10"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding SelectedProducto.Nombre}" FontSize="24" FontWeight="Bold" Margin="10"/>
+                        <Border Background="Red" Width="50" Height="30" CornerRadius="5" 
+                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="12" Visibility="Collapsed" x:Name="borderDesc">
+                            <TextBlock x:Name="txbDesc" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
                     <!-- Precio del Producto -->
-                    <StackPanel Margin="10">
-                        <TextBlock Text="{Binding SelectedVariante.Precio}" FontSize="24"/>
+                    <StackPanel Margin="10" Orientation="Horizontal">
+                        <TextBlock Text="{Binding SelectedVariante.Precio, StringFormat=C2}" x:Name="txbPrecio" FontSize="24" Foreground="#007ACC" FontWeight="SemiBold"/>
+                        <TextBlock Margin="10,0,0,0"  x:Name="txbPrecioFinal" FontSize="24" FontWeight="Bold" Foreground="#007ACC"/>
                     </StackPanel>
                     <!-- Cantidad -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">

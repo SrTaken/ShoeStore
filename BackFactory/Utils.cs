@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoeStoreFront
+namespace BackFactory
 {
     public static class Utils
     {
@@ -22,5 +22,7 @@ namespace ShoeStoreFront
         public static CategoriaManager CategoriaManager { get; set; }
         public static MetodoEnvioManager MetodoEnvioManager { get; set; }
         public static IVAManager IVAManager { get; set; }
+        public static EmpresaManager EmpresaManager { get; set; }
+        public static FacturaManager FacturaManager { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Model.Product;
 
 namespace Model.Cesta
 {
@@ -23,6 +24,8 @@ namespace Model.Cesta
         [BsonIgnore]
         public decimal Precio { get; set; }
         [BsonIgnore]
-        public decimal IVA { get; set; }
+        public IVA IVA { get; set; }
+        [BsonIgnore]
+        public double Descuento { get; set; }
     }
 }

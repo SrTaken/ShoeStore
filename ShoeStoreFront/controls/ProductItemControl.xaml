@@ -4,16 +4,40 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             d:DesignHeight="100" d:DesignWidth="300"
+             d:DesignHeight="350" d:DesignWidth="350"
              x:Name="ucProducto">
-    <Border Background="White" Padding="10" Margin="5" CornerRadius="5" BorderBrush="#007ACC" BorderThickness="1">
-        <StackPanel Orientation="Horizontal">
-            <Image Width="80" Height="80" Margin="5" Source="{Binding ElementName=ucProducto, Path=MyProducto.Variantes[0].Imagenes[0], FallbackValue=C:\\_Images\\Products\\placeholder.png}"/>
-            <StackPanel Margin="10,0,0,0">
-                <TextBlock FontSize="16" FontWeight="Bold" Foreground="#333" Text="{Binding ElementName=ucProducto, Path=MyProducto.Nombre}"/>
-                <TextBlock FontSize="14" Foreground="#007ACC" Text="{Binding ElementName=ucProducto, Path=MyProducto.Variantes[0].Precio, StringFormat=C2}"/>
+    <Border Background="White" Padding="10" Margin="10" CornerRadius="15" 
+            BorderBrush="#007ACC" BorderThickness="2">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="5" Opacity="0.3"/>
+        </Border.Effect>
+
+        <Grid Width="330" Height="330">
+            <!--Imagen -->
+            <Grid>
+                <Image Width="200" Height="200" VerticalAlignment="Top" HorizontalAlignment="Center"
+                       Source="{Binding ElementName=ucProducto, Path=MyProducto.Variantes[0].Imagenes[0], 
+                                FallbackValue=C:\\_Images\\Products\\placeholder.png}"
+                       Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <!-- DEsc -->
+                <Border Background="Red" Width="50" Height="30" CornerRadius="5" 
+                        HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Visibility="Collapsed" x:Name="borderDesc">
+                    <TextBlock Text="{Binding ElementName=ucProducto, Path=MyProducto.Variantes[0].Descuento, StringFormat='{}{0}%'}" 
+                               Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
+
+            <!--Datos -->
+            <StackPanel VerticalAlignment="Bottom" Opacity="0.9"
+                        Height="100" Width="330">
+                <TextBlock FontSize="18" FontWeight="Bold" Foreground="#333" TextAlignment="Center"
+                           Text="{Binding ElementName=ucProducto, Path=MyProducto.Nombre}" 
+                           Margin="5"/>
+
+                <TextBlock FontSize="16" Foreground="#007ACC" FontWeight="SemiBold" TextAlignment="Center" x:Name="txbPrecio"
+                           Text="{Binding ElementName=ucProducto, Path=MyProducto.Variantes[0].Precio, StringFormat=C2}"/>
+                <TextBlock FontSize="16" Foreground="#007ACC" FontWeight="Bold" TextAlignment="Center" x:Name="txbPrecioFinal" />
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </Border>
 </UserControl>
-
