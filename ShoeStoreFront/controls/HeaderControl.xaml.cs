@@ -22,11 +22,11 @@ namespace ShoeStoreFront.controls
     /// </summary>
     public partial class HeaderControl : UserControl
     {
-       // public Usuario MyUsuario { get; set; }
         public HeaderControl()
         {
             InitializeComponent();
-            MyUsuario = Utils.LoggedUser;
+            MyUsuario = Utils.LoggedUser; 
+            
         }
 
 
@@ -50,8 +50,8 @@ namespace ShoeStoreFront.controls
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow();
             Utils.LoggedUser = null;
+            MainWindow mainWindow = new MainWindow(); 
             mainWindow.Show();
             Window.GetWindow(this).Close();
         }
@@ -63,5 +63,16 @@ namespace ShoeStoreFront.controls
             cestaWindow.Show();
         }
 
+        private void ucHeader_Loaded(object sender, RoutedEventArgs e)
+        {
+            txbVentana.Text = Window.GetWindow(this)?.Title;
+
+            txbCestaItems.Text = Utils.MyCesta.Productos.Count.ToString() ?? "0";  
+        }
+
+        public void UpdateCestaItems()
+        {
+            txbCestaItems.Text = Utils.MyCesta.Productos.Count.ToString() ?? "0";
+        }
     }
 }

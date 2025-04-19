@@ -10,7 +10,8 @@
         WindowState="Maximized"
         ResizeMode="NoResize"
         WindowStyle="None"
-        Background="#f0f0f0">
+        Background="#f0f0f0"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <ResourceDictionary Source="WindowResources.xaml"/>
     </Window.Resources>
@@ -24,6 +25,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Header Control -->
@@ -71,7 +73,7 @@
         </Border>
 
         <!-- Categorías -->
-        <Border Grid.Column="0" Grid.Row="3" Margin="10" Background="White" Padding="10" CornerRadius="5">
+        <Border Grid.Column="0" Grid.Row="3" Grid.RowSpan="2" Margin="10" Background="White" Padding="10" CornerRadius="5">
             <Border.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
             </Border.Effect>
@@ -81,12 +83,11 @@
             </StackPanel>
         </Border>
 
-        <!-- Productos -->
         <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Margin="10" Background="White" Padding="10" CornerRadius="5">
             <Border.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
             </Border.Effect>
-            <ListView x:Name="lvProd" SelectionChanged="lvProd_SelectionChanged">
+            <ListView x:Name="lvProd" SelectionChanged="lvProd_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
@@ -98,6 +99,13 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+        </Border>
+
+        <Border Grid.Column="1" Grid.Row="4" Margin="10" Background="White" Padding="10" CornerRadius="5">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
+            </Border.Effect>
+            <controls:PaginationControl x:Name="paginationControl" HorizontalAlignment="Center" VerticalAlignment="Center" PreviousClicked="PaginationControl_PreviousClicked" NextClicked="PaginationControl_NextClicked" ItemsPerPageChanged="paginationControl_ItemsPerPageChanged"  />
         </Border>
     </Grid>
 </Window>

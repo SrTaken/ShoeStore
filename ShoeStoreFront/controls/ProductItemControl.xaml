@@ -5,20 +5,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="350" d:DesignWidth="350"
-             x:Name="ucProducto">
+             x:Name="ucProducto"
+             >
     <Border Background="White" Padding="10" Margin="10" CornerRadius="15" 
             BorderBrush="#007ACC" BorderThickness="2">
         <Border.Effect>
             <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="5" Opacity="0.3"/>
         </Border.Effect>
 
-        <Grid Width="330" Height="330">
+        <Grid Width="330" Height="330" x:Name="gridProd">
             <!--Imagen -->
             <Grid>
                 <Image Width="200" Height="200" VerticalAlignment="Top" HorizontalAlignment="Center"
                        Source="{Binding ElementName=ucProducto, Path=MyProducto.Variantes[0].Imagenes[0], 
                                 FallbackValue=C:\\_Images\\Products\\placeholder.png}"
                        Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <Border x:Name="brdLowStock" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Orange" CornerRadius="15" BorderBrush="#007ACC" BorderThickness="2">
+                    <TextBlock Text="Quedan pocas!" Margin="15"/>
+                </Border>
+                <Border x:Name="brdNoStock" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Background="Red" CornerRadius="15" BorderBrush="#007ACC" BorderThickness="2">
+                    <TextBlock Text="No queda stock!" Margin="15"/>
+                </Border>
                 <!-- DEsc -->
                 <Border Background="Red" Width="50" Height="30" CornerRadius="5" 
                         HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" Visibility="Collapsed" x:Name="borderDesc">

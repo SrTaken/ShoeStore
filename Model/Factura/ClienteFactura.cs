@@ -25,6 +25,10 @@ namespace Model.Factura
 
         [BsonElement("adresa")]
         public Direccion Direccion { get; set; }
-        
+        [BsonElement("nie")]
+        public string Nie { get; set; }
+        [BsonElement("mail")]
+        public string Mail { get; set; }
+
     }
 }

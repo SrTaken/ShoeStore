@@ -35,6 +35,25 @@ namespace ShoeStoreFront.controls
                 txbPrecio.Foreground = System.Windows.Media.Brushes.Gray;
                 txbPrecioFinal.Text = (MyProducto.Variantes[0].Precio - (MyProducto.Variantes[0].Precio * MyProducto.Variantes[0].Descuento/100)).ToString("C2");
             }
+
+            bool lowStock = false;
+            bool noStock = false;
+
+            foreach (var talla in MyProducto.Variantes[0].Tallas)
+            {
+                if (talla.Stock < 10 && talla.Stock > 0)
+                {
+                    lowStock = true;
+                }
+                else if (talla.Stock == 0)
+                {
+                    noStock = true;
+                    break;
+                }
+            }
+
+            brdLowStock.Visibility = lowStock&&!noStock ? Visibility.Visible : Visibility.Collapsed;
+            brdNoStock.Visibility = noStock ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

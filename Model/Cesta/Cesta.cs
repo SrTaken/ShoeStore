@@ -45,7 +45,7 @@ namespace Model.Cesta
         public void AñadirProducto(ItemCesta item)
         {
             Productos.Add(item);
-            RecalcularPrecioFinal();
+            //RecalcularPrecioFinal();
         }
 
         public void QuitarProducto(ItemCesta item)
@@ -55,16 +55,17 @@ namespace Model.Cesta
         }
         public void RecalcularPrecioFinal()
         {
-            decimal totalSinIVA = (Productos.Sum(p => p.Precio  * p.Cantidad)) ;
-            decimal totalSinIvaConMetodoEnvio = totalSinIVA>=precioMetodoEnvioMinimo ? totalSinIVA:totalSinIVA+precioMetodoEnvioBase;
+            decimal totalSinIVA = Productos.Sum(p => (p.Precio - (p.Precio * (decimal)p.Descuento / 100)) * p.Cantidad);
+            decimal totalSinIvaConMetodoEnvio = totalSinIVA >= precioMetodoEnvioMinimo ? totalSinIVA : totalSinIVA + precioMetodoEnvioBase;
             PrecioFinal = totalSinIvaConMetodoEnvio;
 
-            decimal iva = Productos.Sum(p => p.Precio * p.IVA.Porcentaje / 100 * p.Cantidad);
+            decimal iva = Productos.Sum(p => (p.Precio - (p.Precio * (decimal)p.Descuento / 100)) * p.IVA.Porcentaje / 100 * p.Cantidad);
             Impuestos = iva;
 
-            decimal totalConIVA= (Productos.Sum(p => (p.Precio * (1 + p.IVA.Porcentaje/100)) * p.Cantidad));
-            decimal totalConIvaConMetodoEnvio = totalConIVA >= precioMetodoEnvioMinimo ? totalConIVA : totalConIVA + (precioMetodoEnvioBase * 1+ MetodoEnvioIVA/100);
+            decimal totalConIVA = Productos.Sum(p => ((p.Precio - (p.Precio * (decimal)p.Descuento / 100)) * (1 + p.IVA.Porcentaje / 100)) * p.Cantidad);
+            decimal totalConIvaConMetodoEnvio = totalConIVA >= precioMetodoEnvioMinimo ? totalConIVA : totalConIVA + (precioMetodoEnvioBase * (1 + MetodoEnvioIVA / 100));
             PrecioFinalConIva = totalConIvaConMetodoEnvio;
         }
+
     }
 }

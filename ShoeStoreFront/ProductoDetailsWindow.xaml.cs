@@ -8,6 +8,7 @@ using DB;
 using Microsoft.Web.WebView2.Core;
 using Model.Cesta;
 using Model.Product;
+using ShoeStoreFront.controls;
 
 namespace ShoeStoreFront
 {
@@ -26,6 +27,7 @@ namespace ShoeStoreFront
             lsvVariantes.SelectedIndex = 0;
             DataContext = this;
             InitializeWebView();
+            this.Title = SelectedProducto.Nombre;
         }
 
         private async void InitializeWebView()
@@ -45,21 +47,33 @@ namespace ShoeStoreFront
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
-
-            Utils.MyCesta.AñadirProducto(new ItemCesta
+            var existingItem = Utils.MyCesta.Productos.FirstOrDefault(item => item.TallaId == SelectedTalla.Id);
+            if (existingItem != null)
             {
-                TallaId = SelectedTalla.Id,
-                Cantidad = (int)spinnerCantidad.Value,
-                IVA = Utils.IVAManager.GetIVA(SelectedProducto.Iva),
-            });
-
+                existingItem.Cantidad += (int)spinnerCantidad.Value;
+                //Utils.MyCesta.RecalcularPrecioFinal();
+            }
+            else
+            {
+                Utils.MyCesta.AñadirProducto(new ItemCesta
+                {
+                    TallaId = SelectedTalla.Id,
+                    Cantidad = (int)spinnerCantidad.Value,
+                    IVA = Utils.IVAManager.GetIVA(SelectedProducto.Iva),
+                    Talla = SelectedTalla.Talla
+                });
+            }
+                
             Utils.CestaManager.ActualizarCesta(Utils.MyCesta);
 
-            SelectedTalla.Stock -= (int)spinnerCantidad.Value;
-            Utils.ProductoManager.ActualizarStockTalla(SelectedProducto.Id, SelectedTalla.Id, SelectedTalla.Stock);
+            //SelectedTalla.Stock -= (int)spinnerCantidad.Value;
+            //Utils.ProductoManager.ActualizarStockTalla(SelectedProducto.Id, SelectedTalla.Id, SelectedTalla.Stock);
 
             lsvTallas_SelectionChanged(null, null);
             MessageBox.Show($"{SelectedProducto.Nombre} añadido a la cesta.");
+            spinnerCantidad.Value = 1;
+            var header = new HeaderControl();
+            header.UpdateCestaItems();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

@@ -21,6 +21,10 @@ namespace Model.User
         public Direccion Direcciones { get; set; }
         [BsonElement("cc")]
         public TarjetaCredito CC { get; set; }
+        [BsonElement("mail")]
+        public string Mail { get; set; }
+        [BsonElement("nie")]
+        public string Nie { get; set; }
 
 
         public override string ToString()

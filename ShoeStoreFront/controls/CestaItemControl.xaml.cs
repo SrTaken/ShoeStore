@@ -1,8 +1,10 @@
-﻿using Model.Cesta;
+﻿using BackFactory;
+using Model.Cesta;
 using Model.Product;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +31,7 @@ namespace ShoeStoreFront.controls
         }
 
         public event EventHandler<ObjectId> EliminarClicked;
-
+        public event EventHandler PrecioChanged;
 
         public ItemCesta MyItemCesta
         {
@@ -45,21 +47,57 @@ namespace ShoeStoreFront.controls
         {
             var control = d as CestaItemControl;
 
-            control.MyItemChanged( e);
-
-            
+            control.MyItemChanged();            
         }
 
-        private void MyItemChanged(DependencyPropertyChangedEventArgs e)
+        private void MyItemChanged()
         {
-            decimal totalConIVA = MyItemCesta.Precio * MyItemCesta.Cantidad * (1 + MyItemCesta.IVA.Porcentaje / 100);
+            decimal precioConDescuento = MyItemCesta.Precio - (MyItemCesta.Precio * (decimal)MyItemCesta.Descuento / 100);
+            decimal totalConIVA = precioConDescuento * MyItemCesta.Cantidad * (1 + MyItemCesta.IVA.Porcentaje / 100);
 
-            txtTotalConIVA.Text = totalConIVA+"";
+            txtTotalConIVA.Text = totalConIVA.ToString("C2");
+            txbPrecioFinal.Text = precioConDescuento.ToString("C2");
+
+            if (MyItemCesta.Descuento> 0)
+            {
+                borderDesc.Visibility = Visibility.Visible;
+                txbPrecio.TextDecorations = TextDecorations.Strikethrough;
+                txbPrecio.Foreground = System.Windows.Media.Brushes.Gray;
+                txbPrecioFinal.Visibility = Visibility.Visible;
+            }
         }
 
         private void btnEliminar_Click(object sender, RoutedEventArgs e)
         {
             EliminarClicked?.Invoke(this, MyItemCesta.TallaId);
+        }
+
+        private void btnIncrementar_Click(object sender, RoutedEventArgs e)
+        {
+            MyItemCesta.Cantidad += 1;
+            RecargarPrecios();
+        }
+
+        private void btnDecrementar_Click(object sender, RoutedEventArgs e)
+        {
+            if (MyItemCesta.Cantidad > 1)
+            {
+                MyItemCesta.Cantidad -= 1;
+            }
+            else
+            {
+                EliminarClicked?.Invoke(this, MyItemCesta.TallaId);
+            }
+
+            RecargarPrecios();
+        }
+
+        private void RecargarPrecios()
+        {
+            Utils.MyCesta.RecalcularPrecioFinal();
+            MyItemChanged();
+            Utils.CestaManager.ActualizarCesta(Utils.MyCesta);
+            PrecioChanged?.Invoke(this, null);
         }
     }
 }

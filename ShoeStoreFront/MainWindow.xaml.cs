@@ -7,6 +7,7 @@ using Model.User;
 using MongoDB.Bson;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,24 +27,29 @@ namespace ShoeStoreFront;
 /// </summary>
 public partial class MainWindow : Window
 {
-
+    //Metodo para que c2 pueda tener el idioma actual
     public static void InitializeCurrentLanguageForWPF()
     {
-        // Create a made-up IETF language tag "more specific" than the culture we are based on.
-        // This allows all standard logic regarding IETF language tag hierarchy to still make sense and we are
-        // compatible with the fact that we may have overridden language specific defaults with Windows OS settings.
-        var culture = System.Globalization.CultureInfo.CurrentCulture;
-        var language = XmlLanguage.GetLanguage(culture.IetfLanguageTag + "-current");
-        var type = typeof(XmlLanguage);
-        const BindingFlags kField = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-        type.GetField("_equivalentCulture", kField).SetValue(language, culture);
-        type.GetField("_compatibleCulture", kField).SetValue(language, culture);
-        if (culture.IsNeutralCulture)
-            culture = System.Globalization.CultureInfo.CreateSpecificCulture(culture.Name);
-        type.GetField("_specificCulture", kField).SetValue(language, culture);
-        FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(language));
-    }
+        if (!languageLoaded)
+        {
+            // Create a made-up IETF language tag "more specific" than the culture we are based on.
+            // This allows all standard logic regarding IETF language tag hierarchy to still make sense and we are
+            // compatible with the fact that we may have overridden language specific defaults with Windows OS settings.
+            var culture = System.Globalization.CultureInfo.CurrentCulture;
+            var language = XmlLanguage.GetLanguage(culture.IetfLanguageTag + "-current");
+            var type = typeof(XmlLanguage);
+            const BindingFlags kField = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+            type.GetField("_equivalentCulture", kField).SetValue(language, culture);
+            type.GetField("_compatibleCulture", kField).SetValue(language, culture);
+            if (culture.IsNeutralCulture)
+                culture = System.Globalization.CultureInfo.CreateSpecificCulture(culture.Name);
+            type.GetField("_specificCulture", kField).SetValue(language, culture);
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(language));
 
+            languageLoaded = true;
+        }
+    }
+    private static bool languageLoaded = false;
     public MainWindow()
     {
         InitializeCurrentLanguageForWPF();
@@ -63,9 +69,10 @@ public partial class MainWindow : Window
 
     private void btnLogin_Click(object sender, RoutedEventArgs e)
     {
-        if(string.IsNullOrEmpty(txbUsr.Text) || string.IsNullOrEmpty(txbPasw.Text)) return;
+        if(string.IsNullOrEmpty(txbUsr.Text) || string.IsNullOrEmpty(txbPasw.Password)) return;
 
-        Utils.LoggedUser = Utils.UsuarioManager.Login(txbUsr.Text, txbPasw.Text);
+        string hashedPassword = Cifrar(txbPasw.Password);
+        Utils.LoggedUser = Utils.UsuarioManager.Login(txbUsr.Text, "crypted-"+hashedPassword);
         if(Utils.LoggedUser != null)
         {
             CestaManager cestaManager = new CestaManager(Utils.mongoDBConnection);
@@ -91,6 +98,27 @@ public partial class MainWindow : Window
         else
         {
             MessageBox.Show("Usuario o contraseña incorrectos");
+        }
+    }
+
+    private void btnCancel_Click(object sender, RoutedEventArgs e)
+    {
+        Application.Current.Shutdown();
+    }
+
+    private string Cifrar(string input)
+    {
+        using (SHA1 sha1 = SHA1.Create())
+        {
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+            byte[] hashBytes = sha1.ComputeHash(inputBytes);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hashBytes)
+            {
+                sb.Append(b.ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
 }

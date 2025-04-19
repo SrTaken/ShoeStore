@@ -21,5 +21,11 @@ namespace DB
         {
             _facturaCollection.InsertOne(factura);
         }
+
+        public int GetUltimoNumeroFactura()
+        {
+            var lastFactura = _facturaCollection.AsQueryable().OrderByDescending(f => f.NumeroFactura).FirstOrDefault();
+            return lastFactura != null ? lastFactura.NumeroFactura : 0;
+        }
     }
 }

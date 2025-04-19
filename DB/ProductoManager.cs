@@ -72,39 +72,50 @@ namespace DB
             return _productoCollection.Distinct<string>("marca", Builders<Producto>.Filter.Empty).ToList();
         }
 
-        public List<Producto> GetFilteredProducts(Categoria selectedCategory, string nombre, double minPrecio, double maxPrecio, string talla, List<string> marcas)
+        public List<Producto> GetFilteredProducts(Categoria selectedCategory, string nombre, double minPrecio,
+    double maxPrecio, string talla, List<string> marcas, int currentPage, int itemsPerPage)
         {
-            var filteredProducts = GetAll().AsEnumerable();
+            var filteredProducts = GetAll();
 
             if (selectedCategory != null)
             {
                 var categoriasFiltradas = _categoriaManager.GetCategoriasYSubcategorias(selectedCategory);
-                filteredProducts = filteredProducts.Where(p => p.Categorias.Any(c => categoriasFiltradas.Contains(c)));
+                filteredProducts = filteredProducts
+                    .Where(p => p.Categorias.Any(c => categoriasFiltradas.Contains(c)))
+                    .ToList();
             }
 
             if (!string.IsNullOrEmpty(nombre))
             {
-                filteredProducts = filteredProducts.Where(p => p.Nombre.Contains(nombre, StringComparison.OrdinalIgnoreCase)); // es para que sea Case insensitive
+                filteredProducts = filteredProducts
+                    .Where(p => p.Nombre.Contains(nombre, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
-            filteredProducts = filteredProducts.Where(p => p.Variantes.Any(v => v.Precio >= minPrecio && v.Precio <= maxPrecio));
+            filteredProducts = filteredProducts
+                .Where(p => p.Variantes.Any(v => v.Precio >= minPrecio && v.Precio <= maxPrecio))
+                .ToList();
 
-            if (!string.IsNullOrEmpty(talla))
+            if (!string.IsNullOrEmpty(talla) && int.TryParse(talla, out int tint))
             {
-                int tint;
-                if (int.TryParse(talla, out tint))
-                {
-                    filteredProducts = filteredProducts.Where(p => p.Variantes.Any(v => v.Tallas.Any(t => t.Talla == tint)));
-                }
+                filteredProducts = filteredProducts
+                    .Where(p => p.Variantes.Any(v => v.Tallas.Any(t => t.Talla == tint)))
+                    .ToList();
             }
 
             if (marcas != null && marcas.Count > 0)
             {
-                filteredProducts = filteredProducts.Where(p => marcas.Contains(p.Marca));
+                filteredProducts = filteredProducts
+                    .Where(p => marcas.Contains(p.Marca))
+                    .ToList();
             }
 
-            return filteredProducts.ToList();
+            return filteredProducts
+                .Skip((currentPage - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToList();
         }
+
         public void ActualizarStockTalla(ObjectId productoId, ObjectId tallaId, int nuevoStock)
         {
             var filter = Builders<Producto>.Filter.And(
@@ -123,11 +134,56 @@ namespace DB
 
             _productoCollection.UpdateOne(filter, update, updateOptions);
         }
+        public void VerificarStockSuficiente(ObjectId tallaId, int cantidadARestar)
+        {
+            var producto = _productoCollection.Find(p => p.Variantes.Any(v => v.Tallas.Any(t => t.Id == tallaId))).FirstOrDefault();
+
+            if (producto == null)
+            {
+                throw new Exception("NoProdFound");
+            }
+
+            var talla = producto.Variantes.SelectMany(v => v.Tallas).FirstOrDefault(t => t.Id == tallaId);
+
+            if (talla == null)
+            {
+                throw new Exception("NoSizeFromProdFound");
+            }
+
+            if (talla.Stock - cantidadARestar < 0)
+            {
+                throw new Exception("NotEnoughtStock");
+            }
+        }
+
+        public void RestarStockTalla(ObjectId tallaId, int cantidadARestar)
+        {
+            var filter = Builders<Producto>.Filter.ElemMatch(p => p.Variantes,
+                v => v.Tallas.Any(t => t.Id == tallaId));
+
+            var update = Builders<Producto>.Update.Inc("variantes.$[].tallas.$[t].stock", -cantidadARestar);
+
+            var arrayFilters = new List<ArrayFilterDefinition>
+            {
+                new BsonDocumentArrayFilterDefinition<BsonDocument>(new BsonDocument("t._id", tallaId))
+            };
+
+            var updateOptions = new UpdateOptions { ArrayFilters = arrayFilters };
+
+            _productoCollection.UpdateOne(filter, update, updateOptions);
+        }
+
 
         public Producto GetProductoByTallaId(ObjectId tallaId)
         {
             return _productoCollection.Find(p => p.Variantes.Any(v => v.Tallas.Any(t => t.Id == tallaId))).FirstOrDefault();
         }
+
+        public long GetTotalProductos()
+        {
+            return _productoCollection.CountDocuments(_ => true);
+        }
+
     }
 
 }

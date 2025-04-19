@@ -16,6 +16,8 @@ namespace Model.Factura
 
         [BsonElement("empresa")]
         public Empresa Empresa { get; set; }
+        [BsonElement("numero_factura")]
+        public int NumeroFactura { get; set; }
 
         [BsonElement("data")]
         public DateTime Fecha { get; set; }
@@ -23,7 +25,7 @@ namespace Model.Factura
         [BsonElement("precio_base")]
         public decimal PrecioBase { get; set; }
 
-        [BsonElement("precio_final")]
+        [BsonElement("precio_total")]
         public decimal PrecioFinal { get; set; }
 
         [BsonElement("cliente")]

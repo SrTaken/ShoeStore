@@ -47,6 +47,7 @@ namespace ShoeStoreFront
                     {
                         item.Nombre = producto.Nombre;
                         item.Imagen = variante.Imagenes.First();
+                        item.Variante = variante.Color;
                         item.Precio = (decimal)variante.Precio;
                         item.Descuento = variante.Descuento;
                         item.IVA = Utils.IVAManager.GetIVA(producto.Iva);
@@ -63,13 +64,9 @@ namespace ShoeStoreFront
                 return;
             }
 
-            //TODO Falta implementar la funcionalidad de pago
-
             var pagoWindow = new PagoWindow();
             pagoWindow.Show();
             this.Close();
-
-
         }
 
         private void btnCerrar_Click(object sender, RoutedEventArgs e)
@@ -102,6 +99,11 @@ namespace ShoeStoreFront
                 Utils.MyCesta.RecalcularPrecioFinal();
                 txtTotal.Text = Utils.MyCesta.PrecioFinalConIva.ToString("C");
             }
+        }
+
+        private void CestaItemControl_PrecioChanged(object sender, EventArgs e)
+        {
+            txtTotal.Text = Utils.MyCesta.PrecioFinalConIva.ToString("C");
         }
     }
 }

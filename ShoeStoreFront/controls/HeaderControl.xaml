@@ -4,7 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShoeStoreFront.controls"
-             mc:Ignorable="d" Height="50" Background="#595958" HorizontalAlignment="Stretch" x:Name="ucHeader">
+             mc:Ignorable="d" Height="50" Background="#595958" HorizontalAlignment="Stretch" x:Name="ucHeader"
+             Loaded="ucHeader_Loaded">
+    <UserControl.Resources>
+        <ResourceDictionary Source="..\WindowResources.xaml"/>
+    </UserControl.Resources>
     <Grid HorizontalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -15,8 +19,28 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="{Binding ElementName=ucHeader, Path=MyUsuario.Nombre}" VerticalAlignment="Center" Foreground="White" Margin="10,0" />
-        <Button Grid.Column="1" Content="🛒" x:Name="btnCesta"  Click="btnCesta_Click" VerticalAlignment="Center" Margin="10,0" Foreground="White" Background="Transparent" BorderBrush="Transparent" />
-        <Button x:Name="btnLogout" Click="btnLogout_Click" Grid.Column="2" Content="Logout" VerticalAlignment="Center" Margin="10,0" Foreground="White" Background="Transparent" BorderBrush="Transparent" />
-        <Button x:Name="btnExit" Click="btnExit_Click" Grid.Column="3" Content="Close" VerticalAlignment="Center" Margin="10,0" Foreground="White" Background="Transparent" BorderBrush="Transparent" />
+        <TextBlock Text="Ventana" x:Name="txbVentana" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Margin="10,0" />
+
+        <Grid Grid.Column="1">
+            <Button  Content="🛒" x:Name="btnCesta" Click="btnCesta_Click" VerticalAlignment="Center" Margin="10,0" Width="40" Height="40" BorderBrush="Transparent" />
+            <Border Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="Red" CornerRadius="20">
+                <TextBlock Text="1" x:Name="txbCestaItems" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            
+
+        </Grid>
+        
+        <Button x:Name="btnLogout" Click="btnLogout_Click" Content="Logout" Grid.Column="2" VerticalAlignment="Center" Margin="10,0" BorderBrush="Transparent" Width="70" Height="40" />
+        <Button x:Name="btnExit" Click="btnExit_Click" Grid.Column="3" VerticalAlignment="Center" Margin="10,0" Background="Red" BorderBrush="Transparent" Width="40" Height="40">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}" />
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+            <TextBlock Text="❌" Foreground="White" FontWeight="Bold" />
+        </Button>
     </Grid>
 </UserControl>

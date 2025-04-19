@@ -13,27 +13,39 @@
         <ResourceDictionary Source="WindowResources.xaml"/>
     </Window.Resources>
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
-            <TextBlock Text="Pago" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
-            <TextBlock Text="Precio Total:" FontSize="16" Margin="0,0,0,10"/>
-            <TextBlock x:Name="txtPrecioTotal" FontSize="16" FontWeight="Bold" Margin="0,0,0,20"/>
+        <Border Background="White" Padding="20" Margin="20" CornerRadius="10" BorderBrush="#007ACC" BorderThickness="2">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="5" Opacity="0.3"/>
+            </Border.Effect>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="400">
+                <TextBlock Text="Pago" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" HorizontalAlignment="Center"/>
+                <TextBlock Text="Precio Total:" FontSize="16" Margin="0,0,0,10"/>
+                <TextBlock x:Name="txtPrecioTotal" FontSize="16" FontWeight="Bold" Margin="0,0,0,20"/>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Pagar" Width="100" Margin="10" Click="btnPagar_Click"/>
-                <Button Content="Cancelar" Width="100" Margin="10" Click="btnCancelar_Click"/>
-            </StackPanel>
-            <Expander Header="Tarjeta de Crédito VISA" IsExpanded="False">
-                <StackPanel>
-                    <TextBlock Text="Nombre:" FontSize="14" Margin="0,0,0,5"/>
-                    <TextBlock x:Name="txtNombre" FontSize="14" Margin="0,0,0,10"/>
-                    <TextBlock Text="Número:" FontSize="14" Margin="0,0,0,5"/>
-                    <TextBlock x:Name="txtNumero" FontSize="14" Margin="0,0,0,10"/>
-                    <TextBlock Text="CVC:" FontSize="14" Margin="0,0,0,5"/>
-                    <TextBlock x:Name="txtCVC" FontSize="14" Margin="0,0,0,10"/>
-                    <TextBlock Text="Fecha de Caducidad:" FontSize="14" Margin="0,0,0,5"/>
-                    <TextBlock x:Name="txtFechaCaducidad" FontSize="14" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Pagar" Width="100" Margin="10" Click="btnPagar_Click"/>
+                    <Button Content="Cancelar" Width="100" Margin="10" Click="btnCancelar_Click"/>
                 </StackPanel>
-            </Expander>
-        </StackPanel>
+
+                <Expander IsExpanded="False" Margin="0,20,0,0">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/Images/masterCardLogo.png" Width="30" Height="30" Margin="0,0,10,0"/>
+                            <TextBlock Text="Tarjeta de Crédito" VerticalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Expander.Header>
+                    <StackPanel>
+                        <TextBlock Text="Nombre:" FontSize="14" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtNombre" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="Número:" FontSize="14" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtNumero" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="CVC:" FontSize="14" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtCVC" FontSize="14" Margin="0,0,0,10"/>
+                        <TextBlock Text="Fecha de Caducidad:" FontSize="14" Margin="0,0,0,5"/>
+                        <TextBlock x:Name="txtFechaCaducidad" FontSize="14" Margin="0,0,0,10"/>
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

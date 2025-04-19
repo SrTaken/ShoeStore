@@ -25,5 +25,8 @@ namespace Model
 
         [BsonElement("logo")]
         public string logoURL { get; set; }
+
+        [BsonElement("cif")]
+        public string cif { get; set; }
     }
 }

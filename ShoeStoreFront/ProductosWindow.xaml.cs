@@ -2,6 +2,7 @@
 using DB;
 using Model.Product;
 using MongoDB.Bson;
+using ShoeStoreFront.controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,12 +30,14 @@ namespace ShoeStoreFront
         private Categoria selectedCategory;
         private List<string> selectedMarcas = new List<string>();
 
+        private int currentPage = 1;
+        private int itemsPerPage;
+        private long totalItems; 
+        private int totalPages;
+
         public ProductosWindow()
         {
             InitializeComponent();
-            LoadProductos();
-            LoadCategorias();
-            LoadMarcas();
         }
 
         private void LoadProductos()
@@ -86,6 +89,7 @@ namespace ShoeStoreFront
             {
                 selectedMarcas.Add(checkBox.Content.ToString());
                 ApplyFilters();
+                recalculatePagination();
             }
         }
 
@@ -96,6 +100,7 @@ namespace ShoeStoreFront
             {
                 selectedMarcas.Remove(checkBox.Content.ToString());
                 ApplyFilters();
+                recalculatePagination();
             }
         }
 
@@ -105,6 +110,7 @@ namespace ShoeStoreFront
             {
                 selectedCategory = selectedItem.Tag as Categoria;
                 ApplyFilters();
+                recalculatePagination();
             }
         }
 
@@ -115,34 +121,44 @@ namespace ShoeStoreFront
             var maxPrecio = sliderMaxPrecio.Value;
             var talla = txtTalla.Text;
 
-            var filteredProducts = Utils.ProductoManager.GetFilteredProducts(selectedCategory, nombre, minPrecio, maxPrecio, talla, selectedMarcas);
+            var filteredProducts = Utils.ProductoManager.GetFilteredProducts(selectedCategory, nombre, minPrecio, maxPrecio, talla, selectedMarcas, currentPage, itemsPerPage);
             lvProd.ItemsSource = filteredProducts;
+            totalItems = filteredProducts.Count;
         }
 
         private void txtNombre_TextChanged(object sender, TextChangedEventArgs e)
         {
             ApplyFilters();
+            recalculatePagination();
         }
 
         private void sliderMinPrecio_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             ApplyFilters();
+            recalculatePagination();
         }
 
         private void sliderMaxPrecio_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if(sliderMaxPrecio.Value != 1000)
+            if (sliderMaxPrecio.Value != 1000)
+            {
                 ApplyFilters();
+                recalculatePagination();
+            }
+                
         }
 
         private void txtTalla_TextChanged(object sender, TextChangedEventArgs e)
         {
             ApplyFilters();
+            recalculatePagination();
         }
 
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)
         {
-            ClearFilters();
+            ClearFilters(); 
+            totalItems = Utils.ProductoManager.GetTotalProductos();
+            recalculatePagination();
         }
 
         private void ClearFilters()
@@ -156,6 +172,8 @@ namespace ShoeStoreFront
             {
                 checkBox.IsChecked = false;
             }
+
+            
             ApplyFilters();
         }
 
@@ -168,6 +186,45 @@ namespace ShoeStoreFront
                 productWindow.Show();
                 this.Close();
             }
+        }
+
+        private void PaginationControl_PreviousClicked(object sender, EventArgs e)
+        {
+            currentPage--;
+            currentPage = (currentPage - 2 + totalPages) % totalPages + 1;
+            ApplyFilters();
+        }
+
+        private void PaginationControl_NextClicked(object sender, EventArgs e)
+        {
+            currentPage++;
+            currentPage = currentPage % totalPages + 1;
+            ApplyFilters();
+        }
+
+        
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+           
+            // LoadProductos();
+            LoadCategorias();
+            LoadMarcas();
+            itemsPerPage = paginationControl.ItemPerPage;
+            totalItems = Utils.ProductoManager.GetTotalProductos();
+            recalculatePagination();
+            ApplyFilters();//Para cargar los productos
+        }
+
+        private void paginationControl_ItemsPerPageChanged(object sender, EventArgs e)
+        {
+            itemsPerPage = paginationControl.ItemPerPage;
+            ApplyFilters();
+        }
+
+        private void recalculatePagination()
+        {
+            totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+            currentPage = 1;
         }
     }
 }

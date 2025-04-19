@@ -3,19 +3,79 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ShoeStoreFront.controls"
              mc:Ignorable="d" 
-             x:Name="ucItemCesta">
-    <StackPanel Orientation="Horizontal">
-        <Image Source="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Imagen}" Width="50" Height="50" Margin="5"/>
-        <TextBlock x:Name="txtNombre" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Nombre}" Margin="5"/>
-        <TextBlock x:Name="txtPrecio" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Precio, StringFormat=C2}" Margin="5"/>
-        <TextBlock Text="Cantidad: " Margin="5"/>
-        <TextBlock x:Name="txtQt" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Cantidad}" Margin="5"/>
-        <TextBlock Text="IVA: " Margin="5"/>
-        <TextBlock x:Name="txtIVA" Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.IVA}" Margin="5"/>
-        <TextBlock Text="Total: " Margin="5"/>
-        <TextBlock x:Name="txtTotalConIVA" Margin="5"/>
-        <Button Content="Eliminar" x:Name="btnEliminar" Click="btnEliminar_Click" Margin="5"/>
-    </StackPanel>
+             x:Name="ucItemCesta"
+             Height="450"
+             Width="600">
+    <UserControl.Resources>
+        <ResourceDictionary Source="..\WindowResources.xaml"/>
+    </UserControl.Resources>
+    <Border Background="White" Padding="25" Margin="20" CornerRadius="20" BorderBrush="#007ACC" BorderThickness="3">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Imagen -->
+            <Image Source="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Imagen, 
+                                FallbackValue=C:\\_Images\\Products\\placeholder.png}" Width="140" Height="140" Margin="20"
+                   Grid.RowSpan="4" Stretch="Uniform" ClipToBounds="True"/>
+
+            <!-- Nombre  precio -->
+            <StackPanel Grid.Column="1" Grid.Row="0" Margin="15" Grid.ColumnSpan="2">
+                <TextBlock Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Nombre}"
+                           FontSize="22" FontWeight="Bold" Foreground="#333"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Precio, StringFormat=C2}"
+                               FontSize="18" Foreground="#007ACC" FontWeight="SemiBold" x:Name="txbPrecio" Margin="5" Height="35"/>
+                    <Border Background="Red" Width="60" Height="35" CornerRadius="8"  
+                            HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10" Visibility="Collapsed" x:Name="borderDesc">
+                        <TextBlock Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Descuento, StringFormat='{}{0}%'}" 
+                                   Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+                <TextBlock FontSize="18" Foreground="#007ACC" FontWeight="Bold" x:Name="txbPrecioFinal" Visibility="Collapsed" />
+            </StackPanel>
+
+            <!-- Cantidad Talla -->
+            <StackPanel Grid.Column="1" Grid.Row="1" Margin="15">
+                <TextBlock Text="Cantidad: " FontSize="16"/>
+                <TextBlock Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Cantidad}" FontSize="16" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="2" Margin="15">
+                <TextBlock Text="Talla: " FontSize="16"/>
+                <TextBlock Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.Talla}" FontSize="16" FontWeight="Bold"/>
+            </StackPanel>
+
+            <!-- IVA Total Descuento -->
+            <StackPanel Grid.Column="2" Grid.Row="1" Margin="15">
+                <TextBlock Text="IVA: " FontSize="16"/>
+                <TextBlock Text="{Binding ElementName=ucItemCesta, Path=MyItemCesta.IVA}" FontSize="16" FontWeight="Bold"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Grid.Row="2" Margin="15">
+                <TextBlock Text="Total: " FontSize="16"/>
+                <TextBlock x:Name="txtTotalConIVA" FontSize="18" FontWeight="Bold" Foreground="#D32F2F"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Border Background="#007ACC" CornerRadius="20" Height="55" Width="85">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Button Content="-" x:Name="btnDecrementar" Click="btnDecrementar_Click" Width="30" Height="30" />
+                            <Button Content="+" x:Name="btnIncrementar" Click="btnIncrementar_Click" Width="30" Height="30"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Button Content="🗑" x:Name="btnEliminar" Click="btnEliminar_Click" Height="55" FontSize="22"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>

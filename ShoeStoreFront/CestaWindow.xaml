@@ -28,10 +28,15 @@
             <Border.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="10" ShadowDepth="3"/>
             </Border.Effect>
-            <ListView x:Name="lvCestaProductos">
+            <ListView x:Name="lvCestaProductos" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Margin="0" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <controls:CestaItemControl MyItemCesta="{Binding}" EliminarClicked="CestaItemControl_EliminarClicked"/>
+                        <controls:CestaItemControl MyItemCesta="{Binding}" EliminarClicked="CestaItemControl_EliminarClicked" PrecioChanged="CestaItemControl_PrecioChanged"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
